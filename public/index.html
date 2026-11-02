@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Assessment</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    :root { --primary: #1e3a8a; --accent: #2563eb; --success: #16a34a; --bg: #f8fafc; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: #0f172a; padding: 16px; }
+    .card { background: #ffffff; max-width: 680px; margin: 0 auto 24px; border-radius: 14px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+    .branding { text-align: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 20px; }
+    .school-logo { max-width: 90px; height: auto; border-radius: 50%; margin-bottom: 10px; }
+    .title { font-size: 1.35rem; font-weight: 700; color: var(--primary); }
+    .subtitle { color: #64748b; font-size: 0.95rem; margin-top: 4px; }
+    .field { margin-bottom: 18px; text-align: left; }
+    label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+    input[type="text"] { width: 100%; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .btn { display: block; width: 100%; background: var(--accent); color: white; border: none; padding: 14px; font-size: 1rem; font-weight: 700; border-radius: 8px; cursor: pointer; }
+    .btn:active { transform: scale(0.99); }
+    .timer-bar { position: sticky; top: 12px; z-index: 50; background: #fee2e2; border: 1.5px solid #ef4444; color: #b91c1c; font-weight: 700; padding: 10px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .q-box { background: #fdfdfe; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .q-text { font-size: 1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+    .option-item { display: flex; align-items: center; padding: 10px 14px; margin-bottom: 8px; background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer; }
+    .option-item:hover { border-color: var(--accent); background: #f8fafc; }
+    .option-item input { margin-right: 12px; transform: scale(1.2); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="loginCard">
+    <div class="branding">
+      <img src="logo.png" alt="School Logo" class="school-logo" onerror="this.style.display='none'">
+      <h2 class="title" id="displayTitle">Online Examination</h2>
+      <p class="subtitle" id="displaySubtitle">Enter student details to begin</p>
+    </div>
+
+    <div class="field">
+      <label for="studentName">Student Full Name *</label>
+      <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" autocomplete="off" required>
+    </div>
+    <div class="field">
+      <label for="studentRoll">Roll Number *</label>
+      <input type="text" id="studentRoll" placeholder="e.g. 14" autocomplete="off" required>
+    </div>
+
+    <button class="btn" id="startBtn" onclick="startAssessment()" disabled>Loading Test...</button>
+  </div>
+
+  <div class="card hidden" id="examCard">
+    <div class="timer-bar">
+      <span id="testTag">Exam Paper</span>
+      <span id="countdown">Time Left: 45:00</span>
+    </div>
+
+    <div id="questionsContainer"></div>
+
+    <button class="btn" style="background: var(--success); margin-top: 24px;" onclick="submitExam(false)">Submit Final Answers</button>
+  </div>
+
+  <div class="card hidden" id="finishCard" style="text-align: center; padding: 36px 20px;">
+    <h2 style="color: var(--success); font-size: 1.6rem; margin-bottom: 8px;">Exam Submitted!</h2>
+    <p id="studentSummary" style="color: #475569; font-weight: 500;"></p>
+    
+    <div style="background: #f0fdf4; border: 2px dashed #86efac; border-radius: 12px; padding: 20px; margin: 24px 0;">
+      <span style="font-size: 0.9rem; color: #166534; font-weight: 600; text-transform: uppercase;">Final Score</span>
+      <div id="scoreBox" style="font-size: 2.8rem; font-weight: 800; color: #15803d;">0 / 0</div>
+    </div>
+
+    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 24px;">Your responses have been recorded. You may close this tab.</p>
+    <button class="btn" style="background: #475569;" onclick="window.close(); alert('You may now close this browser window.');">Close Window</button>
+  </div>
+
+<script>
+const GITHUB_USER = "codomainalex";
+const GITHUB_REPO = "school-exam";
+const GITHUB_BRANCH = "main";
+
+const urlParams = new URLSearchParams(window.location.search);
+const examFile = urlParams.get('test') || 'class2_maths';
+const durationMinutes = parseInt(urlParams.get('mins')) || 45;
+
+let parsedQuestions = [];
+let userAnswers = {};
+let timerId = null;
+let secondsRemaining = durationMinutes * 60;
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${examFile}.csv`;
+
+  document.getElementById('displayTitle').innerText = examFile.replace(/_/g, ' ').toUpperCase();
+  document.getElementById('testTag').innerText = examFile.replace(/_/g, ' ');
+
+  Papa.parse(rawCsvUrl, {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+      if (!results.data || results.data.length === 0) {
+        alert('Exam CSV could not be loaded. Please check the URL parameter.');
+        return;
+      }
+
+      const correctIndexMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+
+      parsedQuestions = results.data.map((row, index) => {
+        const correctLetter = (row.Correct || row.correct || 'A').trim().toUpperCase();
+        return {
+          id: index,
+          q: row.Question || row.question,
+          choices: [
+            row.A || row.option_a,
+            row.B || row.option_b,
+            row.C || row.option_c,
+            row.D || row.option_d
+          ],
+          correctIdx: correctIndexMap[correctLetter] ?? 0
+        };
+      });
+
+      const btn = document.getElementById('startBtn');
+      btn.innerText = "Enter Examination";
+      btn.disabled = false;
+    },
+    error: function() {
+      alert('Failed to connect to GitHub questions. Verify repository visibility.');
+    }
+  });
+});
+
+function startAssessment() {
+  const name = document.getElementById('studentName').value.trim();
+  const roll = document.getElementById('studentRoll').value.trim();
+  if (!name || !roll) return alert('Please enter both Full Name and Roll Number.');
+
+  document.getElementById('loginCard').classList.add('hidden');
+  document.getElementById('examCard').classList.remove('hidden');
+
+  renderQuestions();
+  startTimer();
+}
+
+function renderQuestions() {
+  const container = document.getElementById('questionsContainer');
+
+  const randomizedQuestions = shuffle(parsedQuestions.map(item => ({
+    ...item,
+    shuffledChoices: shuffle(item.choices.map((choiceText, origIdx) => ({
+      text: choiceText,
+      origIdx: origIdx
+    })))
+  })));
+
+  container.innerHTML = randomizedQuestions.map((q, displayIdx) => `
+    <div class="q-box">
+      <div class="q-text">Q${displayIdx + 1}. ${q.q}</div>
+      ${q.shuffledChoices.map(c => `
+        <label class="option-item">
+          <input type="radio" name="q_${q.id}" value="${c.origIdx}" onchange="recordAnswer(${q.id}, ${c.origIdx})">
+          <span>${c.text}</span>
+        </label>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function recordAnswer(qId, choiceIdx) {
+  userAnswers[qId] = choiceIdx;
+}
+
+function startTimer() {
+  const countdownEl = document.getElementById('countdown');
+  timerId = setInterval(() => {
+    secondsRemaining--;
+    const mins = Math.floor(secondsRemaining / 60);
+    const secs = secondsRemaining % 60;
+    countdownEl.innerText = `Time Left: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+    if (secondsRemaining <= 0) {
+      clearInterval(timerId);
+      alert('Time is up! Submitting exam automatically.');
+      submitExam(true);
+    }
+  }, 1000);
+}
+
+function submitExam(isAuto) {
+  if (!isAuto && !confirm('Are you sure you want to finish and submit your exam?')) {
+    return;
+  }
+
+  clearInterval(timerId);
+  const name = document.getElementById('studentName').value.trim();
+  const roll = document.getElementById('studentRoll').value.trim();
+
+  let score = 0;
+  parsedQuestions.forEach(q => {
+    if (userAnswers[q.id] === q.correctIdx) {
+      score++;
+    }
+  });
+
+  document.getElementById('examCard').classList.add('hidden');
+  document.getElementById('finishCard').classList.remove('hidden');
+  document.getElementById('studentSummary').innerText = `Student: ${name} (Roll: ${roll})`;
+  document.getElementById('scoreBox').innerText = `${score} / ${parsedQuestions.length}`;
+}
+</script>
+</body>
+</html>
