@@ -11,11 +11,11 @@
   <style>
     :root {
       --primary: #7F1D1D;          /* Sacred Heart Maroon */
-      --primary-dark: #651515;     /* Deeper Maroon */
+      --primary-dark: #651515;     /* Deep Maroon */
       --secondary: #FBBF24;        /* Gold */
-      --bg-page: #FFFBEB;          /* Parchment / Light Cream */
-      --card-surface: #FFFFFF;     /* White card background */
-      --border-subtle: #FDE68A;    /* Soft gold border */
+      --bg-page: #FFFBEB;          /* Cream/Parchment */
+      --card-surface: #FFFFFF;
+      --border-subtle: #FDE68A;
       --border-card: #E5E7EB;
       --text-main: #1F2937;
       --text-muted: #6B7280;
@@ -27,42 +27,42 @@
 
     .portal-shell { max-width: 660px; margin: 0 auto; }
 
-    /* Portal Card */
+    /* Login Card & Header */
     .portal-card {
       background: var(--card-surface);
       border: 1.5px solid var(--border-subtle);
       border-radius: 20px;
-      padding: 36px 28px;
+      overflow: hidden;
       box-shadow: 0 15px 35px -5px rgba(127, 29, 29, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
-    /* School Branding Block */
-    .brand-section {
-      text-align: center;
-      margin-bottom: 28px;
+    .campus-banner {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 4px solid var(--secondary);
     }
 
+    .brand-section {
+      text-align: center;
+      margin-top: -100px;
+      margin-bottom: 24px;
+      padding: 0 24px;
+      position: relative;
+    }
+
+    /* Enlarged 190px Crest */
     .school-crest {
-      width: 96px;
-      height: 96px;
+      width: 190px;
+      height: 190px;
       border-radius: 50%;
       object-fit: contain;
       background-color: #FFFFFF !important;
-      padding: 10px;
-      margin-top: 4px;
-      display: inline-block;
-    }
-    .crest-container {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 130px;
-      height: 130px;
-      background-color: #FFFFFF !important;
-      border-radius: 50%;
       border: 4px solid var(--primary);
-      box-shadow: 0 0 0 4px var(--secondary), 0 10px 25px rgba(127, 29, 29, 0.2);
-      margin-bottom: 20px;
+      box-shadow: 0 0 0 5px var(--secondary), 0 12px 30px rgba(0, 0, 0, 0.35);
+      margin: 0 auto 16px;
+      display: block;
     }
 
     .school-title {
@@ -82,6 +82,8 @@
       margin-top: 6px;
       text-transform: uppercase;
     }
+
+    .content-body { padding: 0 28px 36px; }
 
     /* Meta Ribbon */
     .meta-ribbon {
@@ -112,7 +114,7 @@
       color: var(--primary);
     }
 
-    /* Input Fields */
+    /* Form Fields */
     .field-group { margin-bottom: 20px; text-align: left; }
     .field-label {
       display: block;
@@ -139,7 +141,6 @@
       box-shadow: 0 0 0 3px rgba(127, 29, 29, 0.15);
     }
 
-    /* Main Action Button */
     .btn-action {
       width: 100%;
       background: var(--primary);
@@ -159,7 +160,7 @@
     .btn-action:active { transform: scale(0.99); }
     .btn-action:disabled { background: #9CA3AF; box-shadow: none; cursor: not-allowed; }
 
-    /* Exam Top Navigation Bar */
+    /* Sticky Bar on Exam Screen */
     .exam-nav {
       position: sticky;
       top: 12px;
@@ -187,7 +188,7 @@
       letter-spacing: 0.05em;
     }
 
-    /* Question Cards */
+    /* Question Panels */
     .question-block {
       background: var(--card-surface);
       border: 1.5px solid var(--border-subtle);
@@ -254,38 +255,41 @@
   <div class="portal-shell">
     <!-- Screen 1: Login & Exam Details -->
     <div class="portal-card" id="loginCard">
+      <img src="school.jpg" alt="Sacred Heart Academy Campus" class="campus-banner" onerror="this.style.display='none'">
       <div class="brand-section">
-        <div class="crest-container"><img src="logo.png" alt="Sacred Heart Academy Crest" class="school-crest" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=SHA'"></div>
+        <img src="logo.png" alt="Sacred Heart Academy Crest" class="school-crest" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=SHA'">
         <h1 class="school-title">Sacred Heart Academy</h1>
         <div class="school-subtitle">Affiliated to CBSE • Estd: 2025</div>
       </div>
 
-      <div class="meta-ribbon">
-        <div class="ribbon-cell">
-          <span>Target Paper</span>
-          <strong id="displayMeta">Class 2 Maths</strong>
+      <div class="content-body">
+        <div class="meta-ribbon">
+          <div class="ribbon-cell">
+            <span>Target Paper</span>
+            <strong id="displayMeta">Class 2 Maths</strong>
+          </div>
+          <div class="ribbon-cell">
+            <span>Duration</span>
+            <strong id="displayDuration">45 Mins</strong>
+          </div>
+          <div class="ribbon-cell">
+            <span>Questions</span>
+            <strong id="displayCount">20 MCQs</strong>
+          </div>
         </div>
-        <div class="ribbon-cell">
-          <span>Duration</span>
-          <strong id="displayDuration">45 Mins</strong>
+
+        <div class="field-group">
+          <label for="studentName" class="field-label">Student Full Name *</label>
+          <input type="text" id="studentName" class="field-input" placeholder="e.g. Rahul Sharma" autocomplete="off" required>
         </div>
-        <div class="ribbon-cell">
-          <span>Questions</span>
-          <strong id="displayCount">20 MCQs</strong>
+
+        <div class="field-group">
+          <label for="studentRoll" class="field-label">Roll Number *</label>
+          <input type="text" id="studentRoll" class="field-input" placeholder="e.g. 14" autocomplete="off" required>
         </div>
-      </div>
 
-      <div class="field-group">
-        <label for="studentName" class="field-label">Student Full Name *</label>
-        <input type="text" id="studentName" class="field-input" placeholder="e.g. Rahul Sharma" autocomplete="off" required>
+        <button class="btn-action" id="startBtn" onclick="startAssessment()" disabled>Loading Examination Sheet...</button>
       </div>
-
-      <div class="field-group">
-        <label for="studentRoll" class="field-label">Roll Number *</label>
-        <input type="text" id="studentRoll" class="field-input" placeholder="e.g. 14" autocomplete="off" required>
-      </div>
-
-      <button class="btn-action" id="startBtn" onclick="startAssessment()" disabled>Loading Examination Sheet...</button>
     </div>
 
     <!-- Screen 2: Active Timed Exam Screen -->
