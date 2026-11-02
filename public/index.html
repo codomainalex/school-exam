@@ -10,31 +10,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-canvas: #090d16;
-      --card-surface: #0f172a;
-      --card-border: #1e293b;
-      --brand-blue: #2563eb;
-      --brand-blue-hover: #1d4ed8;
-      --gold-accent: #f59e0b;
-      --text-high: #f8fafc;
-      --text-medium: #94a3b8;
-      --text-low: #64748b;
-      --success: #10b981;
-      --danger: #ef4444;
+      --primary: #7F1D1D;          /* Sacred Heart Maroon */
+      --primary-dark: #651515;     /* Deeper Maroon */
+      --secondary: #FBBF24;        /* Gold */
+      --bg-page: #FFFBEB;          /* Parchment / Light Cream */
+      --card-surface: #FFFFFF;     /* White card background */
+      --border-subtle: #FDE68A;    /* Soft gold border */
+      --border-card: #E5E7EB;
+      --text-main: #1F2937;
+      --text-muted: #6B7280;
+      --success: #059669;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg-canvas); color: var(--text-high); min-height: 100vh; padding: 24px 16px 48px; }
+    body { background-color: var(--bg-page); color: var(--text-main); min-height: 100vh; padding: 24px 16px 48px; }
 
     .portal-shell { max-width: 660px; margin: 0 auto; }
 
-    /* Portal Container */
+    /* Portal Card */
     .portal-card {
       background: var(--card-surface);
-      border: 1px solid var(--card-border);
+      border: 1.5px solid var(--border-subtle);
       border-radius: 20px;
       padding: 36px 28px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 15px 35px -5px rgba(127, 29, 29, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
     }
 
     /* School Branding Block */
@@ -49,8 +48,8 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 16px;
-      border: 2.5px solid #2563eb;
-      box-shadow: 0 0 25px rgba(37, 99, 235, 0.35);
+      border: 3px solid var(--primary);
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.4);
       background-color: #000;
     }
 
@@ -59,15 +58,15 @@
       font-size: 1.6rem;
       font-weight: 700;
       letter-spacing: -0.01em;
-      color: #ffffff;
+      color: var(--primary);
       text-transform: uppercase;
     }
 
     .school-subtitle {
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: 0.78rem;
+      font-weight: 800;
       letter-spacing: 0.12em;
-      color: var(--gold-accent);
+      color: #B45309;
       margin-top: 6px;
       text-transform: uppercase;
     }
@@ -77,8 +76,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      background: #080c14;
-      border: 1px solid #162032;
+      background: #FEF3C7;
+      border: 1px solid #FDE68A;
       border-radius: 14px;
       padding: 14px 12px;
       margin-bottom: 24px;
@@ -88,8 +87,8 @@
     .ribbon-cell span {
       display: block;
       font-size: 0.7rem;
-      font-weight: 600;
-      color: var(--text-low);
+      font-weight: 700;
+      color: #92400E;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 3px;
@@ -97,8 +96,8 @@
 
     .ribbon-cell strong {
       font-size: 0.95rem;
-      font-weight: 700;
-      color: #e2e8f0;
+      font-weight: 800;
+      color: var(--primary);
     }
 
     /* Input Fields */
@@ -106,32 +105,33 @@
     .field-label {
       display: block;
       font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-medium);
+      font-weight: 700;
+      color: #374151;
       margin-bottom: 8px;
     }
 
     .field-input {
       width: 100%;
-      background: #090e17;
-      border: 1.5px solid var(--card-border);
+      background: #FFFFFF;
+      border: 1.5px solid #D1D5DB;
       border-radius: 12px;
       padding: 14px 16px;
-      color: #ffffff;
+      color: #111827;
       font-size: 1rem;
       outline: none;
       transition: all 0.2s ease;
     }
 
     .field-input:focus {
-      border-color: var(--brand-blue);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(127, 29, 29, 0.15);
     }
 
+    /* Main Action Button */
     .btn-action {
       width: 100%;
-      background: var(--brand-blue);
-      color: #ffffff;
+      background: var(--primary);
+      color: #FFFFFF;
       font-size: 1.05rem;
       font-weight: 700;
       padding: 16px;
@@ -140,13 +140,14 @@
       cursor: pointer;
       transition: background 0.2s ease, transform 0.1s ease;
       margin-top: 8px;
+      box-shadow: 0 4px 14px rgba(127, 29, 29, 0.25);
     }
 
-    .btn-action:hover { background: var(--brand-blue-hover); }
+    .btn-action:hover { background: var(--primary-dark); }
     .btn-action:active { transform: scale(0.99); }
-    .btn-action:disabled { background: #1e293b; color: #64748b; cursor: not-allowed; }
+    .btn-action:disabled { background: #9CA3AF; box-shadow: none; cursor: not-allowed; }
 
-    /* Exam Screen Top Navigation */
+    /* Exam Top Navigation Bar */
     .exam-nav {
       position: sticky;
       top: 12px;
@@ -154,20 +155,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid var(--card-border);
+      background: rgba(127, 29, 29, 0.96);
       backdrop-filter: blur(12px);
+      color: white;
       padding: 12px 18px;
       border-radius: 14px;
       margin-bottom: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 25px rgba(127, 29, 29, 0.2);
     }
 
-    .candidate-name { font-size: 0.9rem; font-weight: 600; color: #cbd5e1; }
+    .candidate-name { font-size: 0.9rem; font-weight: 600; color: #FEE2E2; }
     .timer-badge {
-      background: #7f1d1d;
-      color: #fecaca;
-      border: 1px solid #991b1b;
+      background: var(--secondary);
+      color: #78350F;
       padding: 5px 12px;
       border-radius: 8px;
       font-weight: 800;
@@ -175,13 +175,14 @@
       letter-spacing: 0.05em;
     }
 
-    /* Question Panels */
+    /* Question Cards */
     .question-block {
       background: var(--card-surface);
-      border: 1px solid var(--card-border);
+      border: 1.5px solid var(--border-subtle);
       border-radius: 16px;
       padding: 22px 20px;
       margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
     }
 
     .q-top-row {
@@ -193,17 +194,17 @@
 
     .q-pill {
       font-size: 0.75rem;
-      font-weight: 700;
-      color: #60a5fa;
-      background: rgba(37, 99, 235, 0.15);
+      font-weight: 800;
+      color: var(--primary);
+      background: #FEE2E2;
       padding: 4px 10px;
       border-radius: 6px;
     }
 
     .q-text {
       font-size: 1.05rem;
-      font-weight: 600;
-      color: #f8fafc;
+      font-weight: 700;
+      color: #111827;
       line-height: 1.5;
       margin-bottom: 16px;
     }
@@ -213,25 +214,25 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #090e17;
-      border: 1.5px solid var(--card-border);
+      background: #FFFDF5;
+      border: 1.5px solid #E5E7EB;
       border-radius: 12px;
       padding: 13px 16px;
       cursor: pointer;
       font-size: 0.95rem;
       font-weight: 500;
       transition: all 0.15s ease;
-      color: #cbd5e1;
+      color: #374151;
     }
 
-    .choice-row:hover { border-color: #334155; background: #0e1524; }
+    .choice-row:hover { border-color: var(--secondary); background: #FEF9C3; }
     .choice-row.selected {
-      border-color: #3b82f6;
-      background: rgba(37, 99, 235, 0.15);
-      color: #ffffff;
-      font-weight: 600;
+      border-color: var(--primary);
+      background: #FEE2E2;
+      color: var(--primary);
+      font-weight: 700;
     }
-    .choice-row input { accent-color: var(--brand-blue); transform: scale(1.15); }
+    .choice-row input { accent-color: var(--primary); transform: scale(1.15); }
 
     .hidden { display: none !important; }
   </style>
@@ -239,7 +240,7 @@
 <body>
 
   <div class="portal-shell">
-    <!-- PAGE 1: Login & Exam Details -->
+    <!-- Screen 1: Login & Exam Details -->
     <div class="portal-card" id="loginCard">
       <div class="brand-section">
         <img src="logo.png" alt="Sacred Heart Academy Crest" class="school-crest" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=SHA'">
@@ -275,7 +276,7 @@
       <button class="btn-action" id="startBtn" onclick="startAssessment()" disabled>Loading Examination Sheet...</button>
     </div>
 
-    <!-- PAGE 2: Active Timed Exam Screen -->
+    <!-- Screen 2: Active Timed Exam Screen -->
     <div class="hidden" id="examCard">
       <div class="exam-nav">
         <div class="candidate-name" id="activeStudent">Candidate Name</div>
@@ -289,19 +290,19 @@
       </button>
     </div>
 
-    <!-- PAGE 3: Final Score Confirmation -->
+    <!-- Screen 3: Final Score Confirmation -->
     <div class="portal-card hidden" id="finishCard" style="text-align: center; padding: 48px 24px;">
-      <div style="width: 72px; height: 72px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid #059669; font-size: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">✓</div>
-      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">Exam Submitted!</h2>
-      <p id="studentSummary" style="color: var(--text-low); font-size: 0.95rem; margin-bottom: 24px;"></p>
+      <div style="width: 72px; height: 72px; background: #ECFDF5; color: var(--success); border: 2px solid #A7F3D0; font-size: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">✓</div>
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--primary); margin-bottom: 6px;">Exam Submitted!</h2>
+      <p id="studentSummary" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;"></p>
 
-      <div style="background: #080c14; border: 1px dashed var(--card-border); border-radius: 14px; padding: 24px; margin-bottom: 24px;">
-        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-medium); text-transform: uppercase; letter-spacing: 0.05em;">Assessment Score</span>
-        <div id="scoreBox" style="font-family: 'Space Grotesk', sans-serif; font-size: 3.2rem; font-weight: 700; color: #38bdf8; margin-top: 6px;">0 / 20</div>
+      <div style="background: #FEF3C7; border: 1.5px dashed var(--secondary); border-radius: 14px; padding: 24px; margin-bottom: 24px;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: 0.05em;">Assessment Score</span>
+        <div id="scoreBox" style="font-family: 'Space Grotesk', sans-serif; font-size: 3.2rem; font-weight: 800; color: var(--primary); margin-top: 6px;">0 / 20</div>
       </div>
 
-      <p style="font-size: 0.88rem; color: var(--text-low); margin-bottom: 24px;">Your responses have been recorded. You can safely close this browser window.</p>
-      <button class="btn-action" style="background: #1e293b; color: #cbd5e1;" onclick="window.close(); alert('You may now close this window.');">Exit Assessment</button>
+      <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">Your responses have been recorded. You can safely close this browser window.</p>
+      <button class="btn-action" style="background: var(--primary);" onclick="window.close(); alert('You may now close this window.');">Exit Assessment</button>
     </div>
   </div>
 
@@ -407,7 +408,7 @@ function renderQuestions() {
     <div class="question-block">
       <div class="q-top-row">
         <span class="q-pill">Question ${displayIdx + 1} of ${randomizedQuestions.length}</span>
-        <span style="font-size:0.75rem; color:#64748b; font-weight:600;">1 Mark</span>
+        <span style="font-size:0.75rem; color:#6B7280; font-weight:600;">1 Mark</span>
       </div>
       <div class="q-text">${q.q}</div>
       <div class="choices-column">
