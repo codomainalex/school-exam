@@ -462,6 +462,49 @@
         Apply Settings
       </button>
 
+      
+      <!-- WhatsApp Link Generator Section -->
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;">
+        <h4 style="margin: 0 0 10px 0; color: #1e293b; font-size: 14px; font-weight: 700;">🔗 Shareable Exam Link Generator</h4>
+        
+        <div style="margin-bottom: 8px;">
+          <label style="font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px;">Quiz Series Name</label>
+          <input type="text" id="genQuizName" value="SAFAL SCHOLARS QUIZ" placeholder="e.g. SAFAL SCHOLARS QUIZ" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px; box-sizing: border-box; font-weight: 600; color: #0f172a;">
+          <div style="display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap;">
+            <button type="button" onclick="setQuizPreset('SAFAL SCHOLARS QUIZ')" style="padding: 3px 8px; font-size: 11px; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; border-radius: 4px; cursor: pointer;">Safal</button>
+            <button type="button" onclick="setQuizPreset('WEEKLY EXCELLENCE TEST')" style="padding: 3px 8px; font-size: 11px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer;">Excellence</button>
+            <button type="button" onclick="setQuizPreset('SUNDAY SPRINT ASSESSMENT')" style="padding: 3px 8px; font-size: 11px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer;">Sunday Sprint</button>
+            <button type="button" onclick="setQuizPreset('MID-TERM MOCK ASSESSMENT')" style="padding: 3px 8px; font-size: 11px; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 4px; cursor: pointer;">Mock Test</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <select id="genClass" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px;">
+            <option value="class2">Class 2</option>
+            <option value="class3" selected>Class 3</option>
+            <option value="class4">Class 4</option>
+            <option value="class5">Class 5</option>
+            <option value="class6">Class 6</option>
+          </select>
+          <select id="genSubject" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px;">
+            <option value="maths" selected>Maths</option>
+            <option value="science">Science</option>
+            <option value="english">English</option>
+            <option value="sst">SST</option>
+            <option value="computer">Computer</option>
+            <option value="bengali">Bengali</option>
+            <option value="hindi">Hindi</option>
+          </select>
+        </div>
+
+        <button type="button" onclick="copyGeneratedExamLink()" style="width: 100%; padding: 10px; background: #2563eb; color: #ffffff; border: none; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer;">
+          📋 Copy WhatsApp Link & Message
+        </button>
+        <div id="copyNotice" style="display: none; color: #16a34a; font-size: 12px; font-weight: 600; text-align: center; margin-top: 6px;">
+          ✅ Link & Message copied to clipboard!
+        </div>
+      </div>
+
       <a href="https://docs.google.com/spreadsheets/d/1ViRuL4Rl_f54HemN5Ak1VOe8Ih7Y3ty5MacpGeFBxoc/edit?pli=1&gid=0#gid=0" target="_blank" rel="noopener noreferrer" style="display: block; width: 100%; margin-top: 12px; padding: 12px 0; background: #0f766e; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; text-align: center; box-sizing: border-box;">
         📊 Open Live Scores Sheet
       </a>
@@ -469,6 +512,47 @@
   </div>
 
 <script>
+
+function setQuizPreset(name) {
+  const el = document.getElementById('genQuizName');
+  if (el) el.value = name;
+}
+
+function copyGeneratedExamLink() {
+  const quizName = (document.getElementById('genQuizName') ? document.getElementById('genQuizName').value.trim() : '') || 'WEEKLY ASSESSMENT';
+  const cls = document.getElementById('genClass').value;
+  const sub = document.getElementById('genSubject').value;
+  const duration = document.getElementById('adminDuration').value || 25;
+  const cutoff = document.getElementById('adminCutoff').value.trim();
+
+  let link = `https://school-exam-seven.vercel.app/?test=${cls}_${sub}&mins=${duration}`;
+  if (cutoff) {
+    link += `&until=${cutoff}`;
+  }
+
+  const clsName = cls.replace('class', 'Std-');
+  const subName = sub.charAt(0).toUpperCase() + sub.slice(1);
+
+  const textToCopy = `🏛️ *SACRED HEART ACADEMY*\n` +
+    `🌟 *${quizName.toUpperCase()}*\n` +
+    `━━━━━━━━━━━━━━━━━━━━\n` +
+    `📝 Class: ${clsName} | Subject: ${subName}\n` +
+    `⏱️ Duration: ${duration} Minutes\n` +
+    (cutoff ? `⏰ Cut-off Time: ${cutoff}\n` : '') +
+    `📌 *Instructions:*\n` +
+    `• Enter student Full Name and Roll Number.\n` +
+    `• Single submission per student.\n\n` +
+    `👉 *Tap link to begin test:*\n${link}`;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    const notice = document.getElementById('copyNotice');
+    notice.style.display = 'block';
+    setTimeout(() => { notice.style.display = 'none'; }, 3000);
+  }).catch(() => {
+    alert("Copied link: " + link);
+  });
+}
+
 const GITHUB_USER = "codomainalex";
 const GITHUB_REPO = "school-exam";
 const GITHUB_BRANCH = "main";
