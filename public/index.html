@@ -725,6 +725,20 @@ function submitExam(isAuto) {
   const finalScore = (correctCount * marksPerQuestion);
   const maxMarks = (parsedQuestions.length * marksPerQuestion);
 
+  // Dispatch score to Google Sheet
+  fetch("https://script.google.com/macros/s/AKfycbzoOx5y2kXZhkifb0flQkpKhHvJmZPYlUooclG6-REodp7UYV0qvI--9S-RHK2H7GTgfQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: name,
+      roll: roll,
+      paper: formatDisplayName(document.getElementById('selectClass').value, document.getElementById('selectSubject').value),
+      score: finalScore,
+      maxMarks: maxMarks
+    })
+  }).catch(err => console.error("Sheet sync error:", err));
+
   document.getElementById('examCard').classList.add('hidden');
   document.getElementById('finishCard').classList.remove('hidden');
   document.getElementById('studentSummary').innerText = `Candidate: ${name} | Roll No: ${roll}`;
