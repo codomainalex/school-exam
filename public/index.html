@@ -52,7 +52,7 @@
       position: relative;
     }
 
-    /* Enlarged 190px Crest */
+    /* 190px Crest */
     .school-crest {
       width: 190px;
       height: 190px;
@@ -85,6 +85,14 @@
 
     .content-body { padding: 0 28px 36px; }
 
+    /* Dropdown Grid */
+    .selection-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
     /* Meta Ribbon */
     .meta-ribbon {
       display: grid;
@@ -115,7 +123,7 @@
     }
 
     /* Form Fields */
-    .field-group { margin-bottom: 20px; text-align: left; }
+    .field-group { margin-bottom: 18px; text-align: left; }
     .field-label {
       display: block;
       font-size: 0.85rem;
@@ -124,7 +132,7 @@
       margin-bottom: 8px;
     }
 
-    .field-input {
+    .field-input, .field-select {
       width: 100%;
       background: #FFFFFF;
       border: 1.5px solid #D1D5DB;
@@ -136,7 +144,12 @@
       transition: all 0.2s ease;
     }
 
-    .field-input:focus {
+    .field-select {
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .field-input:focus, .field-select:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(127, 29, 29, 0.15);
     }
@@ -159,6 +172,59 @@
     .btn-action:hover { background: var(--primary-dark); }
     .btn-action:active { transform: scale(0.99); }
     .btn-action:disabled { background: #9CA3AF; box-shadow: none; cursor: not-allowed; }
+
+    /* Admin Footer Trigger */
+    .admin-trigger {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 24px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #92400E;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Modal / Admin Drawer */
+    .admin-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .admin-card {
+      background: #FFFFFF;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 18px;
+      padding: 28px 24px;
+      border: 2px solid var(--border-subtle);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1.5px solid var(--border-card);
+      padding-bottom: 12px;
+    }
+
+    .admin-header h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
     /* Sticky Bar on Exam Screen */
     .exam-nav {
@@ -263,18 +329,48 @@
       </div>
 
       <div class="content-body">
+        <!-- Interactive Selectors -->
+        <div class="selection-grid">
+          <div class="field-group" style="margin-bottom:0;">
+            <label for="selectClass" class="field-label">Select Class *</label>
+            <select id="selectClass" class="field-select" onchange="onExamSelectionChange()">
+              <option value="class1">Class 1</option>
+              <option value="class2" selected>Class 2</option>
+              <option value="class3">Class 3</option>
+              <option value="class4">Class 4</option>
+              <option value="class5">Class 5</option>
+              <option value="class6">Class 6</option>
+              <option value="class7">Class 7</option>
+              <option value="class8">Class 8</option>
+              <option value="class9">Class 9</option>
+              <option value="class10">Class 10</option>
+            </select>
+          </div>
+
+          <div class="field-group" style="margin-bottom:0;">
+            <label for="selectSubject" class="field-label">Select Subject *</label>
+            <select id="selectSubject" class="field-select" onchange="onExamSelectionChange()">
+              <option value="maths" selected>Mathematics</option>
+              <option value="science">Science</option>
+              <option value="english">English</option>
+              <option value="evs">EVS</option>
+              <option value="social">Social Studies</option>
+            </select>
+          </div>
+        </div>
+
         <div class="meta-ribbon">
           <div class="ribbon-cell">
             <span>Target Paper</span>
-            <strong id="displayMeta">Class 2 Maths</strong>
+            <strong id="displayMeta">CLASS 2 — Maths</strong>
           </div>
           <div class="ribbon-cell">
             <span>Duration</span>
-            <strong id="displayDuration">45 Mins</strong>
+            <strong id="displayDuration">25 Mins</strong>
           </div>
           <div class="ribbon-cell">
-            <span>Questions</span>
-            <strong id="displayCount">20 MCQs</strong>
+            <span>Marks</span>
+            <strong id="displayMarks">--</strong>
           </div>
         </div>
 
@@ -289,6 +385,10 @@
         </div>
 
         <button class="btn-action" id="startBtn" onclick="startAssessment()" disabled>Loading Examination Sheet...</button>
+
+        <div class="admin-trigger" onclick="openAdminPanel()">
+          <span>⚙️ Teacher & Administrator Console</span>
+        </div>
       </div>
     </div>
 
@@ -296,7 +396,7 @@
     <div class="hidden" id="examCard">
       <div class="exam-nav">
         <div class="candidate-name" id="activeStudent">Candidate Name</div>
-        <div class="timer-badge" id="countdown">45:00</div>
+        <div class="timer-badge" id="countdown">25:00</div>
       </div>
 
       <div id="questionsContainer"></div>
@@ -313,12 +413,41 @@
       <p id="studentSummary" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;"></p>
 
       <div style="background: #FEF3C7; border: 1.5px dashed var(--secondary); border-radius: 14px; padding: 24px; margin-bottom: 24px;">
-        <span style="font-size: 0.8rem; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: 0.05em;">Assessment Score</span>
-        <div id="scoreBox" style="font-family: 'Space Grotesk', sans-serif; font-size: 3.2rem; font-weight: 800; color: var(--primary); margin-top: 6px;">0 / 20</div>
+        <span style="font-size: 0.8rem; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: 0.05em;">Calculated Score</span>
+        <div id="scoreBox" style="font-family: 'Space Grotesk', sans-serif; font-size: 3.2rem; font-weight: 800; color: var(--primary); margin-top: 6px;">0 / 0</div>
       </div>
 
       <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">Your responses have been recorded. You can safely close this browser window.</p>
       <button class="btn-action" style="background: var(--primary);" onclick="window.close(); alert('You may now close this window.');">Exit Assessment</button>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div id="adminModal" class="admin-modal hidden">
+    <div class="admin-card">
+      <div class="admin-header">
+        <h3>Exam Admin Control</h3>
+        <span style="cursor:pointer; font-weight:bold; font-size:1.2rem;" onclick="closeAdminPanel()">✕</span>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Exam Duration (Minutes)</label>
+        <input type="number" id="adminDuration" class="field-input" min="5" max="180" value="25">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Marks Per Question</label>
+        <input type="number" id="adminMarksPerQ" class="field-input" min="0.5" step="0.5" max="10" value="1">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Strict Cut-off Expiry (Optional HH:MM, 24-hr)</label>
+        <input type="text" id="adminCutoff" class="field-input" placeholder="e.g. 17:45">
+      </div>
+
+      <button class="btn-action" style="background: #059669; margin-top: 10px;" onclick="saveAdminSettings()">
+        Apply Settings
+      </button>
     </div>
   </div>
 
@@ -327,36 +456,58 @@ const GITHUB_USER = "codomainalex";
 const GITHUB_REPO = "school-exam";
 const GITHUB_BRANCH = "main";
 
+// 1. Settings state (Defaults to 25 mins & 1 mark per question)
 const urlParams = new URLSearchParams(window.location.search);
-const examFile = urlParams.get('test') || 'class2_maths';
-const durationMinutes = parseInt(urlParams.get('mins')) || 45;
+let durationMinutes = parseInt(urlParams.get('mins')) || parseInt(localStorage.getItem('sha_exam_mins')) || 25;
+let marksPerQuestion = parseFloat(urlParams.get('marks')) || parseFloat(localStorage.getItem('sha_marks_per_q')) || 1.0;
+let lockTimeStr = urlParams.get('until') || localStorage.getItem('sha_exam_until') || '';
 
 let parsedQuestions = [];
 let userAnswers = {};
 let timerId = null;
 let secondsRemaining = durationMinutes * 60;
+let currentExamFile = "class2_maths";
+let lockDate = null;
 
-function formatMetadata(fileName) {
-  const parts = fileName.split('_');
-  const classPart = parts[0] ? parts[0].replace(/([a-zA-Z]+)(\d+)/, '$1 $2').toUpperCase() : 'GENERAL';
-  const subjectPart = parts[1] ? parts[1].charAt(0).toUpperCase() + parts[1].slice(1) : 'Exam';
-  return `${classPart} — ${subjectPart}`;
-}
+function calculateLock() {
+  if (lockTimeStr && lockTimeStr.includes(':')) {
+    const [targetH, targetM] = lockTimeStr.split(':').map(Number);
+    lockDate = new Date();
+    lockDate.setHours(targetH, targetM, 0, 0);
 
-function shuffle(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    const diffSeconds = Math.floor((lockDate - new Date()) / 1000);
+    if (diffSeconds > 0) {
+      secondsRemaining = Math.min(durationMinutes * 60, diffSeconds);
+    } else {
+      secondsRemaining = 0;
+    }
+  } else {
+    lockDate = null;
+    secondsRemaining = durationMinutes * 60;
   }
-  return arr;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('displayMeta').innerText = formatMetadata(examFile);
-  document.getElementById('displayDuration').innerText = `${durationMinutes} Mins`;
+function formatDisplayName(classVal, subjectVal) {
+  const classNum = classVal.replace('class', '');
+  const subjectCap = subjectVal.charAt(0).toUpperCase() + subjectVal.slice(1);
+  return `CLASS ${classNum} — ${subjectCap}`;
+}
 
-  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${examFile}.csv`;
+function updateRibbonDisplay() {
+  document.getElementById('displayDuration').innerText = `${durationMinutes} Mins`;
+  if (parsedQuestions.length > 0) {
+    const totalMarks = (parsedQuestions.length * marksPerQuestion);
+    document.getElementById('displayMarks').innerText = `${totalMarks % 1 === 0 ? totalMarks : totalMarks.toFixed(1)} Marks`;
+  }
+}
+
+function loadExamData(fileName) {
+  const startBtn = document.getElementById('startBtn');
+  startBtn.disabled = true;
+  startBtn.innerText = "Checking Examination Sheet...";
+  document.getElementById('displayMarks').innerText = "--";
+
+  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${fileName}.csv`;
 
   Papa.parse(rawCsvUrl, {
     download: true,
@@ -364,7 +515,9 @@ window.addEventListener('DOMContentLoaded', () => {
     skipEmptyLines: true,
     complete: function(results) {
       if (!results.data || results.data.length === 0) {
-        alert(`Could not load questions for exam: ${examFile}`);
+        startBtn.innerText = "No Exam Sheet Available";
+        document.getElementById('displayMarks').innerText = "0 Marks";
+        alert(`No question paper found for ${fileName}.csv on GitHub yet. Please select another class or upload the CSV file.`);
         return;
       }
 
@@ -385,18 +538,108 @@ window.addEventListener('DOMContentLoaded', () => {
         };
       });
 
-      document.getElementById('displayCount').innerText = `${parsedQuestions.length} MCQs`;
-      const btn = document.getElementById('startBtn');
-      btn.innerText = "Proceed to Examination →";
-      btn.disabled = false;
+      updateRibbonDisplay();
+
+      if (lockDate && new Date() >= lockDate) {
+        startBtn.disabled = true;
+        startBtn.innerText = `Exam Closed (${lockTimeStr})`;
+        startBtn.style.background = "#6B7280";
+      } else {
+        startBtn.innerText = "Proceed to Examination →";
+        startBtn.disabled = false;
+        startBtn.style.background = "var(--primary)";
+      }
     },
     error: function() {
-      alert(`Failed to load ${examFile}.csv from GitHub.`);
+      startBtn.innerText = "Exam Paper Not Found";
+      document.getElementById('displayMarks').innerText = "0 Marks";
+      alert(`The question paper ${fileName}.csv is not yet uploaded to the exams folder.`);
     }
   });
+}
+
+function onExamSelectionChange() {
+  const selectedClass = document.getElementById('selectClass').value;
+  const selectedSubject = document.getElementById('selectSubject').value;
+  currentExamFile = `${selectedClass}_${selectedSubject}`;
+  
+  document.getElementById('displayMeta').innerText = formatDisplayName(selectedClass, selectedSubject);
+  loadExamData(currentExamFile);
+}
+
+function shuffle(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateLock();
+
+  const urlTest = urlParams.get('test');
+  if (urlTest) {
+    const parts = urlTest.split('_');
+    if (parts[0]) document.getElementById('selectClass').value = parts[0];
+    if (parts[1]) document.getElementById('selectSubject').value = parts[1];
+    currentExamFile = urlTest;
+  }
+
+  const selectedClass = document.getElementById('selectClass').value;
+  const selectedSubject = document.getElementById('selectSubject').value;
+  document.getElementById('displayMeta').innerText = formatDisplayName(selectedClass, selectedSubject);
+
+  document.getElementById('adminDuration').value = durationMinutes;
+  document.getElementById('adminMarksPerQ').value = marksPerQuestion;
+  document.getElementById('adminCutoff').value = lockTimeStr;
+
+  loadExamData(currentExamFile);
 });
 
+/* Admin Console Functions */
+function openAdminPanel() {
+  const pin = prompt("Enter Administrator Access PIN:");
+  if (pin === "1925") {
+    document.getElementById('adminModal').classList.remove('hidden');
+  } else if (pin !== null) {
+    alert("Incorrect Security PIN.");
+  }
+}
+
+function closeAdminPanel() {
+  document.getElementById('adminModal').classList.add('hidden');
+}
+
+function saveAdminSettings() {
+  const newDur = parseInt(document.getElementById('adminDuration').value);
+  const newMarks = parseFloat(document.getElementById('adminMarksPerQ').value);
+  const newCutoff = document.getElementById('adminCutoff').value.trim();
+
+  if (newDur > 0) durationMinutes = newDur;
+  if (newMarks > 0) marksPerQuestion = newMarks;
+  lockTimeStr = newCutoff;
+
+  localStorage.setItem('sha_exam_mins', durationMinutes);
+  localStorage.setItem('sha_marks_per_q', marksPerQuestion);
+  if (lockTimeStr) {
+    localStorage.setItem('sha_exam_until', lockTimeStr);
+  } else {
+    localStorage.removeItem('sha_exam_until');
+  }
+
+  calculateLock();
+  updateRibbonDisplay();
+  closeAdminPanel();
+  alert(`Settings saved!\nDuration: ${durationMinutes} Mins\nMarks per Q: ${marksPerQuestion}\nCut-off: ${lockTimeStr || 'None'}`);
+}
+
 function startAssessment() {
+  if (lockDate && new Date() >= lockDate) {
+    return alert(`This examination window closed at ${lockTimeStr}. Submissions are no longer accepted.`);
+  }
+
   const name = document.getElementById('studentName').value.trim();
   const roll = document.getElementById('studentRoll').value.trim();
   if (!name || !roll) return alert('Both Full Name and Roll Number are required.');
@@ -424,7 +667,7 @@ function renderQuestions() {
     <div class="question-block">
       <div class="q-top-row">
         <span class="q-pill">Question ${displayIdx + 1} of ${randomizedQuestions.length}</span>
-        <span style="font-size:0.75rem; color:#6B7280; font-weight:600;">1 Mark</span>
+        <span style="font-size:0.75rem; color:#6B7280; font-weight:600;">${marksPerQuestion} Mark${marksPerQuestion > 1 ? 's' : ''}</span>
       </div>
       <div class="q-text">${q.q}</div>
       <div class="choices-column">
@@ -474,15 +717,18 @@ function submitExam(isAuto) {
   const name = document.getElementById('studentName').value.trim();
   const roll = document.getElementById('studentRoll').value.trim();
 
-  let score = 0;
+  let correctCount = 0;
   parsedQuestions.forEach(q => {
-    if (userAnswers[q.id] === q.correctIdx) score++;
+    if (userAnswers[q.id] === q.correctIdx) correctCount++;
   });
+
+  const finalScore = (correctCount * marksPerQuestion);
+  const maxMarks = (parsedQuestions.length * marksPerQuestion);
 
   document.getElementById('examCard').classList.add('hidden');
   document.getElementById('finishCard').classList.remove('hidden');
   document.getElementById('studentSummary').innerText = `Candidate: ${name} | Roll No: ${roll}`;
-  document.getElementById('scoreBox').innerText = `${score} / ${parsedQuestions.length}`;
+  document.getElementById('scoreBox').innerText = `${finalScore % 1 === 0 ? finalScore : finalScore.toFixed(1)} / ${maxMarks % 1 === 0 ? maxMarks : maxMarks.toFixed(1)}`;
 }
 </script>
 </body>
