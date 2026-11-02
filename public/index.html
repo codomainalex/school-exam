@@ -3,75 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Online Assessment</title>
+  <title>Academic Assessment Portal</title>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --primary: #1e3a8a; --accent: #2563eb; --success: #16a34a; --bg: #f8fafc; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: #0f172a; padding: 16px; }
-    .card { background: #ffffff; max-width: 680px; margin: 0 auto 24px; border-radius: 14px; padding: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
-    .branding { text-align: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 16px; margin-bottom: 20px; }
-    .school-logo { max-width: 90px; height: auto; border-radius: 50%; margin-bottom: 10px; }
-    .title { font-size: 1.35rem; font-weight: 700; color: var(--primary); }
-    .subtitle { color: #64748b; font-size: 0.95rem; margin-top: 4px; }
-    .field { margin-bottom: 18px; text-align: left; }
-    label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-    input[type="text"] { width: 100%; padding: 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
-    input[type="text"]:focus { border-color: var(--accent); }
-    .btn { display: block; width: 100%; background: var(--accent); color: white; border: none; padding: 14px; font-size: 1rem; font-weight: 700; border-radius: 8px; cursor: pointer; }
-    .btn:active { transform: scale(0.99); }
-    .timer-bar { position: sticky; top: 12px; z-index: 50; background: #fee2e2; border: 1.5px solid #ef4444; color: #b91c1c; font-weight: 700; padding: 10px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .q-box { background: #fdfdfe; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px; margin-bottom: 16px; }
-    .q-text { font-size: 1rem; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
-    .option-item { display: flex; align-items: center; padding: 10px 14px; margin-bottom: 8px; background: white; border: 1.5px solid #cbd5e1; border-radius: 8px; cursor: pointer; }
-    .option-item:hover { border-color: var(--accent); background: #f8fafc; }
-    .option-item input { margin-right: 12px; transform: scale(1.2); }
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #eff6ff;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --success: #059669;
+      --danger: #dc2626;
+      --card-bg: #ffffff;
+      --page-bg: #f8fafc;
+      --border: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--page-bg); color: var(--text-main); min-height: 100vh; padding: 24px 16px; }
+
+    .container { max-width: 680px; margin: 0 auto; }
+
+    .portal-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 32px 28px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.03);
+      border: 1px solid var(--border);
+    }
+
+    .school-header {
+      text-align: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .school-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 800;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .school-name {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .exam-tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 14px;
+      background: var(--primary-light);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .exam-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: #f1f5f9;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+    }
+
+    .exam-meta-grid div span {
+      color: var(--text-muted);
+      display: block;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .exam-meta-grid div strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .form-group { margin-bottom: 18px; text-align: left; }
+    label { display: block; font-size: 0.875rem; font-weight: 600; color: #334155; margin-bottom: 6px; }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+      background: #fafafa;
+    }
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-action {
+      display: block;
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .btn-action:hover { background: var(--accent-hover); }
+    .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Sticky Bar on Exam Screen */
+    .sticky-header {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .student-badge { font-size: 0.88rem; font-weight: 600; color: #475569; }
+    .timer-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fef2f2;
+      color: var(--danger);
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #fecaca;
+    }
+
+    .question-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .q-number {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .q-text { font-size: 1rem; font-weight: 600; color: var(--text-main); margin-bottom: 16px; line-height: 1.5; }
+
+    .options-grid { display: flex; flex-direction: column; gap: 8px; }
+
+    .opt-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      background: #fafafa;
+    }
+
+    .opt-label:hover { border-color: #cbd5e1; background: #f1f5f9; }
+    .opt-label input[type="radio"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+    .opt-label.selected { border-color: var(--accent); background: var(--primary-light); color: var(--accent); font-weight: 600; }
+
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
-  <div class="card" id="loginCard">
-    <div class="branding">
-      <img src="logo.png" alt="School Logo" class="school-logo" onerror="this.style.display='none'">
-      <h2 class="title" id="displayTitle">Online Examination</h2>
-      <p class="subtitle" id="displaySubtitle">Enter student details to begin</p>
+  <div class="container">
+    <!-- PAGE 1: Dynamic Login & Verification -->
+    <div class="portal-card" id="loginCard">
+      <div class="school-header">
+        <div class="school-badge">📚</div>
+        <h1 class="school-name">Sacred Heart Academy</h1>
+        <div class="exam-tag" id="examBadge">Assessment Portal</div>
+      </div>
+
+      <div class="exam-meta-grid">
+        <div>
+          <span>Target Class</span>
+          <strong id="displayClass">Loading...</strong>
+        </div>
+        <div>
+          <span>Subject</span>
+          <strong id="displaySubject">Loading...</strong>
+        </div>
+        <div>
+          <span>Duration</span>
+          <strong id="displayDuration">45 Minutes</strong>
+        </div>
+        <div>
+          <span>Total Questions</span>
+          <strong id="displayTotalQ">--</strong>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="studentName">Student Full Name *</label>
+        <input type="text" id="studentName" placeholder="Enter student name" required autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label for="studentRoll">Roll Number *</label>
+        <input type="text" id="studentRoll" placeholder="Enter roll number" required autocomplete="off">
+      </div>
+
+      <button class="btn-action" id="startBtn" onclick="startAssessment()" disabled>Verifying Question Bank...</button>
     </div>
 
-    <div class="field">
-      <label for="studentName">Student Full Name *</label>
-      <input type="text" id="studentName" placeholder="e.g. Rahul Sharma" autocomplete="off" required>
-    </div>
-    <div class="field">
-      <label for="studentRoll">Roll Number *</label>
-      <input type="text" id="studentRoll" placeholder="e.g. 14" autocomplete="off" required>
-    </div>
+    <!-- PAGE 2: Exam Surface -->
+    <div class="hidden" id="examCard">
+      <div class="sticky-header">
+        <div class="student-badge" id="activeStudentDisplay">Rahul Sharma (Roll: 14)</div>
+        <div class="timer-badge">
+          <span>⏱</span>
+          <span id="countdown">45:00</span>
+        </div>
+      </div>
 
-    <button class="btn" id="startBtn" onclick="startAssessment()" disabled>Loading Test...</button>
-  </div>
+      <div id="questionsContainer"></div>
 
-  <div class="card hidden" id="examCard">
-    <div class="timer-bar">
-      <span id="testTag">Exam Paper</span>
-      <span id="countdown">Time Left: 45:00</span>
-    </div>
-
-    <div id="questionsContainer"></div>
-
-    <button class="btn" style="background: var(--success); margin-top: 24px;" onclick="submitExam(false)">Submit Final Answers</button>
-  </div>
-
-  <div class="card hidden" id="finishCard" style="text-align: center; padding: 36px 20px;">
-    <h2 style="color: var(--success); font-size: 1.6rem; margin-bottom: 8px;">Exam Submitted!</h2>
-    <p id="studentSummary" style="color: #475569; font-weight: 500;"></p>
-    
-    <div style="background: #f0fdf4; border: 2px dashed #86efac; border-radius: 12px; padding: 20px; margin: 24px 0;">
-      <span style="font-size: 0.9rem; color: #166534; font-weight: 600; text-transform: uppercase;">Final Score</span>
-      <div id="scoreBox" style="font-size: 2.8rem; font-weight: 800; color: #15803d;">0 / 0</div>
+      <button class="btn-action" style="background: var(--success); margin-top: 24px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);" onclick="submitExam(false)">
+        Submit Final Examination
+      </button>
     </div>
 
-    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 24px;">Your responses have been recorded. You may close this tab.</p>
-    <button class="btn" style="background: #475569;" onclick="window.close(); alert('You may now close this browser window.');">Close Window</button>
+    <!-- PAGE 3: Submission Confirmation -->
+    <div class="portal-card hidden" id="finishCard" style="text-align: center; padding: 48px 24px;">
+      <div style="width: 72px; height: 72px; background: #dcfce7; color: #16a34a; font-size: 2.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">✓</div>
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Exam Completed</h2>
+      <p id="studentSummary" style="color: #64748b; font-size: 0.95rem; margin-bottom: 24px;"></p>
+
+      <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+        <span style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em;">Your Assessment Score</span>
+        <div id="scoreBox" style="font-size: 3rem; font-weight: 800; color: var(--accent); margin-top: 6px;">0 / 0</div>
+      </div>
+
+      <p style="font-size: 0.875rem; color: #94a3b8; margin-bottom: 20px;">Your submission has been verified. You can safely close this window.</p>
+      <button class="btn-action" style="background: #475569;" onclick="window.close(); alert('You can now close this browser tab.');">Exit Window</button>
+    </div>
   </div>
 
 <script>
@@ -79,6 +291,7 @@ const GITHUB_USER = "codomainalex";
 const GITHUB_REPO = "school-exam";
 const GITHUB_BRANCH = "main";
 
+// Parse URL: e.g. ?test=class3_maths&mins=45
 const urlParams = new URLSearchParams(window.location.search);
 const examFile = urlParams.get('test') || 'class2_maths';
 const durationMinutes = parseInt(urlParams.get('mins')) || 45;
@@ -87,6 +300,13 @@ let parsedQuestions = [];
 let userAnswers = {};
 let timerId = null;
 let secondsRemaining = durationMinutes * 60;
+
+function formatMetadata(fileName) {
+  const parts = fileName.split('_');
+  const classPart = parts[0] ? parts[0].replace(/([a-zA-Z]+)(\d+)/, '$1 $2').toUpperCase() : 'General';
+  const subjectPart = parts[1] ? parts[1].charAt(0).toUpperCase() + parts[1].slice(1) : 'Assessment';
+  return { classPart, subjectPart };
+}
 
 function shuffle(array) {
   const arr = [...array];
@@ -98,10 +318,13 @@ function shuffle(array) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${examFile}.csv`;
+  const { classPart, subjectPart } = formatMetadata(examFile);
+  document.getElementById('displayClass').innerText = classPart;
+  document.getElementById('displaySubject').innerText = subjectPart;
+  document.getElementById('displayDuration').innerText = `${durationMinutes} Minutes`;
+  document.getElementById('examBadge').innerText = `${classPart} — ${subjectPart}`;
 
-  document.getElementById('displayTitle').innerText = examFile.replace(/_/g, ' ').toUpperCase();
-  document.getElementById('testTag').innerText = examFile.replace(/_/g, ' ');
+  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${examFile}.csv`;
 
   Papa.parse(rawCsvUrl, {
     download: true,
@@ -109,7 +332,7 @@ window.addEventListener('DOMContentLoaded', () => {
     skipEmptyLines: true,
     complete: function(results) {
       if (!results.data || results.data.length === 0) {
-        alert('Exam CSV could not be loaded. Please check the URL parameter.');
+        alert(`Could not find questions for exam: ${examFile}. Please check the link.`);
         return;
       }
 
@@ -130,12 +353,13 @@ window.addEventListener('DOMContentLoaded', () => {
         };
       });
 
+      document.getElementById('displayTotalQ').innerText = `${parsedQuestions.length} Questions`;
       const btn = document.getElementById('startBtn');
-      btn.innerText = "Enter Examination";
+      btn.innerText = "Start Examination";
       btn.disabled = false;
     },
     error: function() {
-      alert('Failed to connect to GitHub questions. Verify repository visibility.');
+      alert(`Failed to load ${examFile}.csv from GitHub. Ensure the file exists in /exams/ and the repo is Public.`);
     }
   });
 });
@@ -147,6 +371,7 @@ function startAssessment() {
 
   document.getElementById('loginCard').classList.add('hidden');
   document.getElementById('examCard').classList.remove('hidden');
+  document.getElementById('activeStudentDisplay').innerText = `${name} (Roll: ${roll})`;
 
   renderQuestions();
   startTimer();
@@ -164,16 +389,25 @@ function renderQuestions() {
   })));
 
   container.innerHTML = randomizedQuestions.map((q, displayIdx) => `
-    <div class="q-box">
-      <div class="q-text">Q${displayIdx + 1}. ${q.q}</div>
-      ${q.shuffledChoices.map(c => `
-        <label class="option-item">
-          <input type="radio" name="q_${q.id}" value="${c.origIdx}" onchange="recordAnswer(${q.id}, ${c.origIdx})">
-          <span>${c.text}</span>
-        </label>
-      `).join('')}
+    <div class="question-card">
+      <div class="q-number">Question ${displayIdx + 1} of ${randomizedQuestions.length}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="options-grid">
+        ${q.shuffledChoices.map(c => `
+          <label class="opt-label" onclick="selectOption(this)">
+            <input type="radio" name="q_${q.id}" value="${c.origIdx}" onchange="recordAnswer(${q.id}, ${c.origIdx})">
+            <span>${c.text}</span>
+          </label>
+        `).join('')}
+      </div>
     </div>
   `).join('');
+}
+
+function selectOption(labelEl) {
+  const parent = labelEl.closest('.options-grid');
+  parent.querySelectorAll('.opt-label').forEach(el => el.classList.remove('selected'));
+  labelEl.classList.add('selected');
 }
 
 function recordAnswer(qId, choiceIdx) {
@@ -186,11 +420,11 @@ function startTimer() {
     secondsRemaining--;
     const mins = Math.floor(secondsRemaining / 60);
     const secs = secondsRemaining % 60;
-    countdownEl.innerText = `Time Left: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    countdownEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 
     if (secondsRemaining <= 0) {
       clearInterval(timerId);
-      alert('Time is up! Submitting exam automatically.');
+      alert('Time expired! Submitting answers automatically.');
       submitExam(true);
     }
   }, 1000);
@@ -207,14 +441,12 @@ function submitExam(isAuto) {
 
   let score = 0;
   parsedQuestions.forEach(q => {
-    if (userAnswers[q.id] === q.correctIdx) {
-      score++;
-    }
+    if (userAnswers[q.id] === q.correctIdx) score++;
   });
 
   document.getElementById('examCard').classList.add('hidden');
   document.getElementById('finishCard').classList.remove('hidden');
-  document.getElementById('studentSummary').innerText = `Student: ${name} (Roll: ${roll})`;
+  document.getElementById('studentSummary').innerText = `Candidate: ${name} | Roll No: ${roll}`;
   document.getElementById('scoreBox').innerText = `${score} / ${parsedQuestions.length}`;
 }
 </script>
