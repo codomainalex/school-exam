@@ -1,0 +1,21 @@
+question_id,class,chapter_number,chapter_name,question_text,option_a,option_b,option_c,option_d,correct_option,explanation,difficulty_level
+C2_Q01,Class 2,8,Grouping and Sharing,Raju has 10 apples. He wants to share them equally between 2 friends. How many apples will each friend get?,2,5,8,10,B,Dividing 10 apples into 2 equal groups gives 5 apples per group (10 / 2 = 5).,Easy
+C2_Q02,Class 2,8,Grouping and Sharing,There are 4 bicycles in a park. Each bicycle has 2 wheels. How many wheels are there in total?,6,7,8,10,C,4 bicycles with 2 wheels each means 2 + 2 + 2 + 2 = 8 wheels.,Easy
+C2_Q03,Class 2,8,Grouping and Sharing,How many pairs of shoes are there in a collection of 6 shoes?,2,3,4,6,B,1 pair equals 2 shoes. So 6 shoes make 6 / 2 = 3 pairs.,Easy
+C2_Q04,Class 2,8,Grouping and Sharing,Meena has 12 balloons. She puts 3 balloons in each packet. How many packets does she make?,3,4,5,6,B,12 balloons divided into groups of 3 gives 12 / 3 = 4 packets.,Medium
+C2_Q05,Class 2,8,Grouping and Sharing,A cow has 4 legs. How many legs do 3 cows have in all?,7,10,12,16,C,3 groups of 4 legs equals 4 + 4 + 4 = 12 legs.,Medium
+C2_Q06,Class 2,8,Grouping and Sharing,"If 15 laddus are packed equally into 3 boxes, how many laddus will be in each box?",3,4,5,6,C,Sharing 15 laddus equally into 3 boxes gives 15 / 3 = 5 laddus per box.,Medium
+C2_Q07,Class 2,8,Grouping and Sharing,Which of the following represents 3 groups of 5 pencils?,3 + 5,5 + 5 + 5,3 + 3 + 3,5 - 3,B,3 groups of 5 means adding 5 three times: 5 + 5 + 5 = 15.,Medium
+C2_Q08,Class 2,8,Grouping and Sharing,"There are 18 mangoes. If 2 mangoes are given to each child, how many children get mangoes?",8,9,10,12,B,18 divided into equal groups of 2 gives 18 / 2 = 9 children.,Hard
+C2_Q09,Class 2,8,Grouping and Sharing,A mother bird has 8 grains. She feeds them equally to 4 chicks. How many grains does each chick receive?,2,4,6,8,A,8 grains shared equally among 4 chicks gives 8 / 4 = 2 grains each.,Medium
+C2_Q10,Class 2,8,Grouping and Sharing,"If 20 marbles are arranged in 4 equal rows, how many marbles are in each row?",4,5,6,10,B,20 marbles divided into 4 rows means 20 / 4 = 5 marbles per row.,Hard
+C2_Q11,Class 2,9,Which Season is it?,"If today is Tuesday, what day was yesterday?",Sunday,Monday,Wednesday,Thursday,B,Monday comes directly before Tuesday.,Easy
+C2_Q12,Class 2,9,Which Season is it?,How many days are there in a week?,5,6,7,8,C,There are 7 days in a complete week.,Easy
+C2_Q13,Class 2,9,Which Season is it?,In which season do we like to wear woolen sweaters and mufflers?,Summer,Rainy,Winter,Spring,C,We wear warm woolen clothes during the cold winter season.,Easy
+C2_Q14,Class 2,9,Which Season is it?,Which month comes immediately after July?,June,August,September,May,B,"August is the 8th month of the year, following July (7th month).",Medium
+C2_Q15,Class 2,9,Which Season is it?,We often carry umbrellas and wear raincoats during which season?,Monsoon / Rainy,Winter,Summer,Autumn,A,Raincoats and umbrellas protect us from rain during the monsoon season.,Easy
+C2_Q16,Class 2,9,Which Season is it?,Which day comes between Friday and Sunday?,Thursday,Saturday,Monday,Tuesday,B,Saturday is the day between Friday and Sunday.,Easy
+C2_Q17,Class 2,9,Which Season is it?,How many months are there in a year?,10,11,12,14,C,A year consists of 12 calendar months (January to December).,Medium
+C2_Q18,Class 2,9,Which Season is it?,In which season do we feel thirsty very often and enjoy cold watermelon and mangoes?,Summer,Winter,Autumn,Monsoon,A,Summer is the hottest season of the year when mangoes and cold drinks are enjoyed.,Medium
+C2_Q19,Class 2,9,Which Season is it?,"If today is Friday, what day will it be after 2 days?",Saturday,Sunday,Monday,Tuesday,B,One day after Friday is Saturday; two days after Friday is Sunday.,Hard
+C2_Q20,Class 2,9,Which Season is it?,Which month is the shortest month of the year with 28 or 29 days?,January,February,April,November,B,February has 28 days in a standard year and 29 days in a leap year.,Hard
