@@ -609,6 +609,18 @@ function updateRibbonDisplay() {
 }
 
 function loadExamData(fileName) {
+  if (!fileName || fileName === 'null' || fileName === 'undefined') {
+    const startBtn = document.getElementById('startBtn');
+    if (startBtn) {
+      startBtn.disabled = true;
+      startBtn.innerText = "Please Select an Exam";
+    }
+    const marksDisplay = document.getElementById('displayMarks');
+    if (marksDisplay) {
+      marksDisplay.innerText = "--";
+    }
+    return;
+  }
   const startBtn = document.getElementById('startBtn');
   startBtn.disabled = true;
   startBtn.innerText = "Checking Examination Sheet...";
