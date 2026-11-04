@@ -465,6 +465,39 @@
   font-weight: 700 !important;
 }
 
+
+  .dev-credit {
+    position: fixed;
+    bottom: 12px;
+    left: 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    z-index: 40;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.2s ease;
+  }
+  .dev-credit span {
+    color: var(--primary);
+    font-weight: 700;
+  }
+  @media (max-width: 480px) {
+    .dev-credit {
+      bottom: 8px;
+      left: 10px;
+      font-size: 0.68rem;
+      padding: 3px 8px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1161,5 +1194,10 @@ function submitExam(isAuto) {
 
 
 </script>
+
+  <!-- Discreet Corner Attribution -->
+  <div class="dev-credit" aria-hidden="true">
+    Designed by <span>Aritra</span>
+  </div>
 </body>
 </html>
