@@ -642,20 +642,22 @@ function loadExamData(fileName) {
 
       const correctIndexMap = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
 
-      parsedQuestions = results.data.map((row, index) => {
-        const correctLetter = (row.Correct || row.correct || 'A').trim().toUpperCase();
-        return {
-          id: index,
-          q: row.Question || row.question,
-          choices: [
-            row.A || row.option_a,
-            row.B || row.option_b,
-            row.C || row.option_c,
-            row.D || row.option_d
-          ],
-          correctIdx: correctIndexMap[correctLetter] ?? 0
-        };
-      });
+      parsedQuestions = results.data
+        .filter(row => (row.question_text || row.Question || row.question || "").toString().trim() !== "")
+        .map((row, index) => {
+          const correctLetter = (row.correct_option || row.Correct || row.correct || 'A').toString().trim().toUpperCase();
+          return {
+            id: index,
+            q: (row.question_text || row.Question || row.question || "").toString().trim(),
+            choices: [
+              (row.option_a ?? row.A ?? "").toString().trim(),
+              (row.option_b ?? row.B ?? "").toString().trim(),
+              (row.option_c ?? row.C ?? "").toString().trim(),
+              (row.option_d ?? row.D ?? "").toString().trim()
+            ],
+            correctIdx: correctIndexMap[correctLetter] ?? 0
+          };
+        });
 
       updateRibbonDisplay();
 
