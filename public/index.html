@@ -645,17 +645,39 @@ function loadExamData(fileName) {
       parsedQuestions = results.data
         .filter(row => (row.question_text || row.Question || row.question || "").toString().trim() !== "")
         .map((row, index) => {
-          const correctLetter = (row.correct_option || row.Correct || row.correct || 'A').toString().trim().toUpperCase();
+          const getVal = (keys) => {
+            for (let k of keys) {
+              if (row[k] !== undefined && row[k] !== null && String(row[k]).trim() !== "") {
+                return String(row[k]).trim();
+              }
+            }
+            return "";
+          };
+
+          const cA = getVal(['option1', 'option_a', 'Option A', 'Option_A', 'A', 'a']);
+          const cB = getVal(['option2', 'option_b', 'Option B', 'Option_B', 'B', 'b']);
+          const cC = getVal(['option3', 'option_c', 'Option C', 'Option_C', 'C', 'c']);
+          const cD = getVal(['option4', 'option_d', 'Option D', 'Option_D', 'D', 'd']);
+
+          const rawAns = getVal(['answer', 'correct_option', 'Correct', 'correct', 'Answer']).trim();
+          const upperAns = rawAns.toUpperCase();
+
+          let correctIdx = 0;
+          if (['A', 'B', 'C', 'D'].includes(upperAns)) {
+            correctIdx = correctIndexMap[upperAns] ?? 0;
+          } else if (['1', '2', '3', '4'].includes(rawAns)) {
+            correctIdx = parseInt(rawAns, 10) - 1;
+          } else if (rawAns !== "") {
+            const choices = [cA, cB, cC, cD].map(c => c.toLowerCase());
+            const matchedIdx = choices.findIndex(c => c === rawAns.toLowerCase());
+            correctIdx = matchedIdx !== -1 ? matchedIdx : 0;
+          }
+
           return {
             id: index,
-            q: (row.question_text || row.Question || row.question || "").toString().trim(),
-            choices: [
-              (row.option_a ?? row.A ?? "").toString().trim(),
-              (row.option_b ?? row.B ?? "").toString().trim(),
-              (row.option_c ?? row.C ?? "").toString().trim(),
-              (row.option_d ?? row.D ?? "").toString().trim()
-            ],
-            correctIdx: correctIndexMap[correctLetter] ?? 0
+            q: getVal(['question_text', 'Question', 'question']),
+            choices: [cA, cB, cC, cD],
+            correctIdx: correctIdx
           };
         });
 
