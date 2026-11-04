@@ -588,6 +588,24 @@ let lockTimeStr = urlParams.get('until') || localStorage.getItem('sha_exam_until
 let parsedQuestions = [];
 let userAnswers = {};
 
+// Telemetry tracking
+window.tabSwitchCount = 0;
+window.examStartTime = null;
+window.examActive = false;
+
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden && window.examActive) {
+    window.tabSwitchCount++;
+  }
+});
+
+window.addEventListener('blur', function() {
+  if (window.examActive) {
+    window.tabSwitchCount++;
+  }
+});
+
+
 let tabSwitchCount = 0;
 let examStartTime = null;
 
@@ -831,6 +849,8 @@ function startAssessment() {
 
   renderQuestions();
   examStartTime = Date.now();
+  window.examStartTime = Date.now();
+  window.examActive = true;
   startTimer();
 }
 
