@@ -587,6 +587,28 @@ let lockTimeStr = urlParams.get('until') || localStorage.getItem('sha_exam_until
 
 let parsedQuestions = [];
 let userAnswers = {};
+
+let tabSwitchCount = 0;
+let examStartTime = null;
+
+// Silent tracking: zero browser permission requests required
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    const examCard = document.getElementById('examCard');
+    if (examCard && !examCard.classList.contains('hidden')) {
+      tabSwitchCount++;
+    }
+  }
+});
+
+window.addEventListener('blur', () => {
+  const examCard = document.getElementById('examCard');
+  if (examCard && !examCard.classList.contains('hidden')) {
+    // Captures split-screen or switching apps on Android tablets/phones silently
+    tabSwitchCount++;
+  }
+});
+
 let timerId = null;
 let secondsRemaining = durationMinutes * 60;
 let currentExamFile = null; // No default test
@@ -808,6 +830,7 @@ function startAssessment() {
   document.getElementById('activeStudent').innerText = `${name} (Roll: ${roll})`;
 
   renderQuestions();
+  examStartTime = Date.now();
   startTimer();
 }
 
