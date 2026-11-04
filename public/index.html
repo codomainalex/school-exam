@@ -574,6 +574,9 @@
       
         
 
+        <button type="button" class="btn-action" style="background: #2563EB; margin-bottom: 12px;" onclick="showQuestionReview()">
+          📝 Review Questions & Answers
+        </button>
         <button class="btn-action" style="background: var(--primary);" onclick="window.close(); alert('You may now close this window.');">Exit Assessment</button>
     </div>
   </div>
@@ -1156,12 +1159,7 @@ function submitExam(isAuto) {
   document.getElementById('scoreBox').innerText = `${finalScore % 1 === 0 ? finalScore : finalScore.toFixed(1)} / ${maxMarks % 1 === 0 ? maxMarks : maxMarks.toFixed(1)}`;
 }
 
-function showQuestionReview() {
-  document.getElementById('finishCard').classList.add('hidden');
-  document.getElementById('examCard').classList.remove('hidden');
-  // Scroll to top of questions smoothly
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+
 </script>
 </body>
 </html>
