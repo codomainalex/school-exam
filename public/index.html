@@ -1099,11 +1099,40 @@ function submitExam(isAuto) {
   document.getElementById('scoreBox').innerText = `${finalScore % 1 === 0 ? finalScore : finalScore.toFixed(1)} / ${maxMarks % 1 === 0 ? maxMarks : maxMarks.toFixed(1)}`;
 }
 
+function revealReview() {
+  document.querySelectorAll('.question-card').forEach(card => {
+    const correctIdx = parseInt(card.getAttribute('data-correct-idx'), 10);
+    const rows = card.querySelectorAll('.choice-row');
+    
+    rows.forEach(row => {
+      row.style.pointerEvents = 'none';
+      const origIdx = parseInt(row.getAttribute('data-orig-idx'), 10);
+      const isSelected = row.classList.contains('selected');
+
+      if (origIdx === correctIdx) {
+        row.classList.remove('selected');
+        row.classList.add('review-correct');
+      } else if (isSelected && origIdx !== correctIdx) {
+        row.classList.remove('selected');
+        row.classList.add('review-wrong');
+      }
+    });
+  });
+}
+
 function showQuestionReview() {
+  if (typeof revealReview === 'function') {
+    revealReview();
+  }
   document.getElementById('finishCard').classList.add('hidden');
   document.getElementById('examCard').classList.remove('hidden');
-  // Scroll to top of questions smoothly
+  
+  // Hide submit button during review mode
+  const submitBtn = document.querySelector("#examCard button[onclick*='submitExam']");
+  if (submitBtn) submitBtn.style.display = 'none';
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 }
 </script>
 </body>
