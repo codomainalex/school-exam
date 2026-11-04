@@ -1033,6 +1033,63 @@ function startTimer() {
   }, 1000);
 }
 
+
+function revealReview() {
+  parsedQuestions.forEach(q => {
+    const card = document.getElementById('qcard-' + q.id);
+    if (!card) return;
+
+    const correctIdx = q.correctIdx;
+    const studentChoice = userAnswers[q.id];
+    const rows = card.querySelectorAll('.choice-row');
+
+    rows.forEach(row => {
+      row.style.pointerEvents = 'none';
+      row.style.cursor = 'default';
+      const origIdx = parseInt(row.getAttribute('data-orig-idx'), 10);
+
+      // Clean default selection highlights
+      row.classList.remove('selected');
+
+      // Green for the correct option
+      if (origIdx === correctIdx) {
+        row.classList.add('review-correct');
+        if (!row.querySelector('.review-tag')) {
+          const tag = document.createElement('span');
+          tag.className = 'review-tag';
+          tag.innerText = '✓ Correct Answer';
+          tag.style.cssText = 'margin-left:auto; font-size:0.78rem; font-weight:700; color:#15803d; background:#dcfce7; padding:2px 8px; border-radius:6px;';
+          row.appendChild(tag);
+        }
+      }
+      // Red if candidate picked this incorrect option
+      else if (studentChoice !== undefined && origIdx === studentChoice) {
+        row.classList.add('review-wrong');
+        if (!row.querySelector('.review-tag')) {
+          const tag = document.createElement('span');
+          tag.className = 'review-tag';
+          tag.innerText = '✗ Your Answer';
+          tag.style.cssText = 'margin-left:auto; font-size:0.78rem; font-weight:700; color:#b91c1c; background:#fee2e2; padding:2px 8px; border-radius:6px;';
+          row.appendChild(tag);
+        }
+      }
+    });
+  });
+}
+
+function showQuestionReview() {
+  revealReview();
+  document.getElementById('finishCard').classList.add('hidden');
+  document.getElementById('examCard').classList.remove('hidden');
+
+  // Hide submit button and back button during review
+  const submitBtn = document.querySelector("#examCard button[onclick*='submitExam']");
+  if (submitBtn) submitBtn.style.display = 'none';
+
+  // Smooth scroll to top of exam
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 function submitExam(isAuto) {
   if (!isAuto && !confirm('Are you sure you want to finish and submit your exam?')) {
     return;
