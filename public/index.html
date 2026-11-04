@@ -344,7 +344,97 @@
       pointer-events: none;
       cursor: default;
     }
-  </style>
+  
+/* Question Card & Telemetry UI Styling */
+.question-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+}
+.q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.q-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+.q-marks {
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+}
+.q-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.choice-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.choice-row:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+.choice-row.selected {
+  background: #eff6ff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+.choice-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #cbd5e1;
+  background: #ffffff;
+  display: inline-block;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.choice-row.selected .choice-indicator {
+  border-color: #2563eb;
+  background: #2563eb;
+  box-shadow: inset 0 0 0 3px #ffffff;
+}
+.choice-text {
+  font-size: 0.95rem;
+  color: #334155;
+  font-weight: 500;
+}
+.choice-row.selected .choice-text {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+</style>
 </head>
 <body>
 
@@ -885,27 +975,15 @@ function renderQuestions() {
   `).join('');
 }
 
-function handleInstantChoice(labelEl, qId, chosenIdx) {
-  const qCard = document.getElementById(`qcard-${qId}`);
-  if (!qCard || qCard.classList.contains('answered')) return;
-  
-  qCard.classList.add('answered');
-  userAnswers[qId] = chosenIdx;
-
-  const correctIdx = parseInt(qCard.getAttribute('data-correct-idx'), 10);
-  const allChoices = qCard.querySelectorAll('.choice-row');
-
-  allChoices.forEach(row => {
-    row.classList.add('locked');
-    const rowIdx = parseInt(row.getAttribute('data-orig-idx'), 10);
-    if (rowIdx === correctIdx) {
-      row.classList.add('correct-ans');
-    }
-  });
-
-  if (chosenIdx !== correctIdx) {
-    labelEl.classList.add('wrong-ans');
+function handleInstantChoice(rowEl, qId, origIdx) {
+  const card = document.getElementById('qcard-' + qId);
+  if (card) {
+    card.querySelectorAll('.choice-row').forEach(el => el.classList.remove('selected'));
   }
+  rowEl.classList.add('selected');
+  const radio = rowEl.querySelector('input[type="radio"]');
+  if (radio) radio.checked = true;
+  userAnswers[qId] = origIdx;
 }
 
 function startTimer() {
