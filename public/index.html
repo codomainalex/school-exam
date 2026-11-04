@@ -626,7 +626,7 @@ function loadExamData(fileName) {
   startBtn.innerText = "Checking Examination Sheet...";
   document.getElementById('displayMarks').innerText = "--";
 
-  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${fileName}.csv`;
+  const rawCsvUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/exams/${fileName}.csv?v=${Date.now()}`;
 
   Papa.parse(rawCsvUrl, {
     download: true,
