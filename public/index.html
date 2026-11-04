@@ -855,64 +855,35 @@ function startAssessment() {
 }
 
 function renderQuestions() {
-  const container = document.getElementById('questionsContainer') || document.getElementById('questionList');
-  if (!container) return;
-  container.innerHTML = '';
+  const container = document.getElementById('questionsContainer');
 
-  parsedQuestions.forEach((q, idx) => {
-    const qDiv = document.createElement('div');
-    qDiv.className = 'bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-6';
+  const randomizedQuestions = shuffle(parsedQuestions.map(item => ({
+    ...item,
+    shuffledChoices: shuffle(item.choices.map((choiceText, origIdx) => ({
+      text: choiceText,
+      origIdx: origIdx
+    })))
+  })));
 
-    const header = document.createElement('div');
-    header.className = 'flex justify-between items-center mb-3 pb-2 border-b border-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-500';
-    header.innerHTML = `<span>Question ${idx + 1} of ${parsedQuestions.length}</span><span class="bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold">1 Mark</span>`;
-    qDiv.appendChild(header);
-
-    const qText = document.createElement('p');
-    qText.className = 'text-slate-800 text-base font-medium mb-4 leading-relaxed';
-    qText.innerText = q.question;
-    qDiv.appendChild(qText);
-
-    const optGrid = document.createElement('div');
-    optGrid.className = 'grid grid-cols-1 gap-2.5';
-
-    ['A', 'B', 'C', 'D'].forEach((key, optIdx) => {
-      const optVal = q.options[optIdx] || q['option_' + key.toLowerCase()] || q['option' + (optIdx + 1)] || '';
-      if (!optVal) return;
-
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.id = `q_${idx}_opt_${optIdx}`;
-      btn.className = 'opt-btn w-full text-left px-4 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center gap-3 transition-all';
-      
-      const isSelected = userAnswers[idx] === optVal;
-      if (isSelected) {
-        btn.className = 'opt-btn w-full text-left px-4 py-3 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-900 flex items-center gap-3 font-medium transition-all shadow-sm';
-      }
-
-      btn.innerHTML = `<span class="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'}">${key}</span><span class="flex-1 text-sm">${optVal}</span>`;
-
-      btn.onclick = () => {
-        userAnswers[idx] = optVal;
-        // Re-render only buttons in this card
-        optGrid.querySelectorAll('button').forEach((b, i) => {
-          b.className = 'opt-btn w-full text-left px-4 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center gap-3 transition-all';
-          const badge = b.querySelector('span');
-          if (badge) badge.className = 'w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold bg-slate-100 text-slate-600';
-        });
-        btn.className = 'opt-btn w-full text-left px-4 py-3 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-900 flex items-center gap-3 font-medium transition-all shadow-sm';
-        const activeBadge = btn.querySelector('span');
-        if (activeBadge) activeBadge.className = 'w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold bg-blue-600 text-white';
-      };
-
-      optGrid.appendChild(btn);
-    });
-
-    qDiv.appendChild(optGrid);
-    container.appendChild(qDiv);
-  });
+  container.innerHTML = randomizedQuestions.map((q, displayIdx) => `
+    <div class="question-card" id="qcard-${q.id}" data-correct-idx="${q.correctIdx}">
+      <div class="q-header">
+        <span class="q-badge">Question ${displayIdx + 1} of ${randomizedQuestions.length}</span>
+        <span class="q-marks">1 Mark</span>
+      </div>
+      <div class="q-title">${q.q}</div>
+      <div class="choices-list">
+        ${q.shuffledChoices.map(c => `
+          <label class="choice-row" data-orig-idx="${c.origIdx}" onclick="handleInstantChoice(this, ${q.id}, ${c.origIdx})">
+            <input type="radio" name="q_${q.id}" value="${c.origIdx}" style="display: none;">
+            <span class="choice-indicator"></span>
+            <span class="choice-text">${c.text}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
 }
-
 
 function handleInstantChoice(labelEl, qId, chosenIdx) {
   const qCard = document.getElementById(`qcard-${qId}`);
