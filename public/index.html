@@ -922,7 +922,7 @@ function submitExam(isAuto) {
   const maxMarks = (parsedQuestions.length * marksPerQuestion);
 
   // Dispatch score to Google Sheet
-  fetch("https://script.google.com/macros/s/AKfycbzoOx5y2kXZhkifb0flQkpKhHvJmZPYlUooclG6-REodp7UYV0qvI--9S-RHK2H7GTgfQ/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbw8RSOLbescRK1saNmeSy935kgjmgu43ltx1gBanx6bxxh5E4dMN2jDo_FnqaPO3LDesQ/exec", {
     method: "POST",
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
