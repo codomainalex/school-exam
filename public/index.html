@@ -1039,8 +1039,13 @@ function submitExam(isAuto) {
   }
 
   clearInterval(timerId);
+  window.examActive = false;
+
   const name = document.getElementById('studentName').value.trim();
   const roll = document.getElementById('studentRoll').value.trim();
+  const selectedPaper = typeof formatDisplayName === 'function' 
+    ? formatDisplayName(document.getElementById('selectClass').value, document.getElementById('selectSubject').value)
+    : "CLASS 2 - Maths";
 
   let correctCount = 0;
   parsedQuestions.forEach(q => {
@@ -1050,7 +1055,24 @@ function submitExam(isAuto) {
   const finalScore = (correctCount * marksPerQuestion);
   const maxMarks = (parsedQuestions.length * marksPerQuestion);
 
-  // Dispatch score to Google Sheet
+  // Compute elapsed time
+  let elapsedSec = 0;
+  if (window.examStartTime) {
+    elapsedSec = Math.round((Date.now() - window.examStartTime) / 1000);
+  } else if (typeof durationMinutes !== 'undefined' && typeof secondsRemaining !== 'undefined') {
+    elapsedSec = (durationMinutes * 60) - secondsRemaining;
+  }
+  let mSpent = Math.floor(elapsedSec / 60);
+  let sSpent = elapsedSec % 60;
+  let formattedDuration = `${mSpent}m ${sSpent < 10 ? '0' : ''}${sSpent}s`;
+  let finalSwitches = Math.max(0, Math.floor((window.tabSwitchCount || 0) / 2));
+
+  // Trigger green/red visual breakdown on all cards
+  if (typeof revealReview === 'function') {
+    revealReview();
+  }
+
+  // Dispatch score and telemetry to Google Sheet
   fetch("https://script.google.com/macros/s/AKfycbw8RSOLbescRK1saNmeSy935kgjmgu43ltx1gBanx6bxxh5E4dMN2jDo_FnqaPO3LDesQ/exec", {
     method: "POST",
     mode: "no-cors",
@@ -1058,16 +1080,30 @@ function submitExam(isAuto) {
     body: JSON.stringify({
       name: name,
       roll: roll,
-      paper: formatDisplayName(document.getElementById('selectClass').value, document.getElementById('selectSubject').value),
+      examName: selectedPaper,
       score: finalScore,
-      maxMarks: maxMarks
+      maxMarks: maxMarks,
+      timeTaken: formattedDuration,
+      tabSwitches: finalSwitches
     })
   }).catch(err => console.error("Sheet sync error:", err));
 
+  // Hide the submit button inside examCard so it cannot be clicked again
+  const submitBtn = document.querySelector("#examCard button[onclick*='submitExam']");
+  if (submitBtn) submitBtn.style.display = 'none';
+
+  // Show score confirmation card
   document.getElementById('examCard').classList.add('hidden');
   document.getElementById('finishCard').classList.remove('hidden');
   document.getElementById('studentSummary').innerText = `Candidate: ${name} | Roll No: ${roll}`;
   document.getElementById('scoreBox').innerText = `${finalScore % 1 === 0 ? finalScore : finalScore.toFixed(1)} / ${maxMarks % 1 === 0 ? maxMarks : maxMarks.toFixed(1)}`;
+}
+
+function showQuestionReview() {
+  document.getElementById('finishCard').classList.add('hidden');
+  document.getElementById('examCard').classList.remove('hidden');
+  // Scroll to top of questions smoothly
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 </body>
