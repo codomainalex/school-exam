@@ -1,0 +1,21 @@
+id,question,option1,option2,option3,option4,answer,chapter
+1,What is 450 - 150?,200,300,350,250,300,Subtraction
+2,Subtract 84 from 100:,16,26,14,24,16,Subtraction
+3,A library has 625 books. 215 books are issued to students. How many books remain in the library?,410,400,420,310,410,Subtraction
+4,Any number minus zero equals:,0,1,The number itself,10,The number itself,Subtraction
+5,Find the difference between 800 and 375:,425,525,435,415,425,Subtraction
+6,Rohit had 540 marbles. He gave 180 marbles to his friend. How many marbles does he have now?,340,360,380,260,360,Subtraction
+7,What is 999 - 99?,900,909,899,990,900,Subtraction
+8,What is 8 x 7?,54,56,64,48,56,Multiplication
+9,Which of the following is the same as 6 + 6 + 6 + 6 + 6?,5 x 6,6 x 6,4 x 6,5 + 6,5 x 6,Multiplication
+10,What is the product of 45 and 10?,450,550,405,4500,450,Multiplication
+11,Any number multiplied by 0 gives:,1,The number itself,0,10,0,Multiplication
+12,A box contains 12 pencils. How many pencils are in 5 such boxes?,50,60,72,65,60,Multiplication
+13,What is 15 x 4?,50,60,45,75,60,Multiplication
+14,"If 9 x 4 = 36, then 4 x 9 = ?",32,36,45,40,36,Multiplication
+15,Divide 36 by 6:,4,5,6,7,6,Division
+16,Share 24 toffees equally among 4 children. How many toffees does each child get?,5,6,7,8,6,Division
+17,"In the division 40 ÷ 5 = 8, what is the quotient?",40,5,8,0,8,Division
+18,"What is 0 divided by any number (e.g., 0 ÷ 9)?",0,9,1,Not possible,0,Division
+19,"If 7 x 8 = 56, then 56 ÷ 7 = ?",6,7,8,9,8,Division
+20,45 flowers are tied into bouquets of 5 flowers each. How many bouquets can be made?,8,9,10,7,9,Division
