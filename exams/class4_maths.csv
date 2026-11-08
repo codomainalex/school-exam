@@ -1,0 +1,21 @@
+id,question,option1,option2,option3,option4,answer,chapter
+1,"What is 5,420 - 1,210?","4,210","4,110","4,310","3,210","4,210",Subtraction
+2,"Subtract 2,675 from 6,000:","3,325","3,425","4,325","3,315","3,325",Subtraction
+3,"A factory produced 8,500 toys. 3,250 toys were shipped to stores. How many toys are left in the factory?","5,150","5,250","5,350","4,250","5,250",Subtraction
+4,"What number must be subtracted from 9,999 to get 4,444?","5,555","5,455","4,555","5,550","5,555",Subtraction
+5,"Find the missing digit: 7,543 - 2,_21 = 5,122.",3,4,2,1,4,Subtraction
+6,"The difference between the place value of 7 in 7,845 and 7 in 2,730 is:","6,300","7,100","6,700","7,000","6,300",Subtraction
+7,"A school library had 4,000 books. During vacation, students borrowed 1,480 books. How many books stayed on the shelves?","2,420","2,520","2,620","3,520","2,520",Subtraction
+8,What is 245 x 100?,"2,450","24,500","245,000","2,405","24,500",Multiplication
+9,Multiply 48 by 25:,"1,100","1,200","1,250","1,150","1,200",Multiplication
+10,A carton holds 36 juice packets. How many juice packets are in 15 such cartons?,540,510,480,560,540,Multiplication
+11,What is 312 x 12?,"3,644","3,744","3,724","3,844","3,744",Multiplication
+12,Which property states that (14 x 5) x 2 = 14 x (5 x 2)?,Commutative Property,Associative Property,Distributive Property,Identity Property,Associative Property,Multiplication
+13,"If one train ticket costs ₹125, what is the cost of 8 tickets?",₹900,₹950,"₹1,000","₹1,050","₹1,000",Multiplication
+14,What is the product of the greatest 2-digit number and the smallest 2-digit number?,990,900,999,"1,000",990,Multiplication
+15,Which of the following is a factor of every number?,0,1,2,10,1,Factors and Multiples
+16,How many factors does the number 12 have?,4,5,6,8,6,Factors and Multiples
+17,What are the first four multiples of 7?,"7, 14, 21, 28","1, 7, 14, 21","7, 14, 24, 32","14, 21, 28, 35","7, 14, 21, 28",Factors and Multiples
+18,Which of the following is a common factor of 15 and 25?,3,5,10,15,5,Factors and Multiples
+19,Which of the following numbers is a prime number?,9,15,19,21,19,Factors and Multiples
+20,What is the smallest common multiple (LCM) of 4 and 6?,12,24,18,2,12,Factors and Multiples
