@@ -1,0 +1,21 @@
+id,question,option1,option2,option3,option4,answer,chapter
+1,"A mark of position with no length, breadth, or thickness is called a:",Line,Point,Ray,Plane,Point,Lines and Angles
+2,How many end points does a line segment have?,0,1,2,Endless,2,Lines and Angles
+3,A portion of a line that starts at one point and goes endlessly in one direction is a:,Ray,Line segment,Point,Angle,Ray,Lines and Angles
+4,Which of the following has a definite and measurable length?,Line,Ray,Line segment,Point,Line segment,Lines and Angles
+5,How many lines can pass through two distinct given points?,Only one,Two,Zero,Infinitely many,Only one,Lines and Angles
+6,A sunbeam or light emitted from a flashlight is a real-life model of a:,Line segment,Line,Ray,Point,Ray,Lines and Angles
+7,How many endpoints does a ray have?,0,1,2,3,1,Lines and Angles
+8,The edge of a ruler or the edge of a table represents a:,Ray,Line segment,Point,Curved line,Line segment,Lines and Angles
+9,Which is the smallest prime number?,0,1,2,3,2,Prime Time
+10,Which of the following numbers is neither prime nor composite?,0,1,2,3,1,Prime Time
+11,Which is the only even prime number?,2,4,6,8,2,Prime Time
+12,How many factors does a prime number have?,1,Exactly 2,3,More than 2,Exactly 2,Prime Time
+13,A number is divisible by 5 if its unit digit is:,2 or 4,0 or 5,1 or 3,Only 0,0 or 5,Prime Time
+14,Which of the following numbers is divisible by 3?,245,314,513,712,513,Prime Time
+15,What is the HCF (Highest Common Factor) of 12 and 18?,2,3,6,12,6,Prime Time
+16,What is the LCM (Lowest Common Multiple) of 4 and 6?,12,24,18,2,12,Prime Time
+17,Two numbers having only 1 as a common factor are called:,Twin primes,Co-prime numbers,Composite numbers,Even numbers,Co-prime numbers,Prime Time
+18,What is the prime factorisation of 24?,2 x 12,3 x 8,4 x 6,2 x 2 x 2 x 3,2 x 2 x 2 x 3,Prime Time
+19,Which of these is a pair of twin primes?,"(3, 5)","(2, 3)","(5, 9)","(7, 13)","(3, 5)",Prime Time
+20,Which of the following is a composite number?,13,17,19,21,21,Prime Time
